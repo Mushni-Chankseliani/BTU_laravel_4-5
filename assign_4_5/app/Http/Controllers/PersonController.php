@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
+use App\Models\Person;
 use Illuminate\Http\Request;
 
-class CountryController extends Controller
+class PersonController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,6 +15,13 @@ class CountryController extends Controller
      */
     public function index()
     {
+        $countries = Country::all();
+        $persons = Person::orderBy('id', 'DESC')->get();
+        
+        return view('person', [
+            'persons' => $persons,
+            'countries' => $countries,
+        ]);
         //
     }
 
@@ -34,7 +43,15 @@ class CountryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Person::create([
+            "name" => $request->name,
+            "country_id" => $request->country_id
+        ]);
+
+        return [
+            'result' => true,
+            'message' => 'Success'
+        ];
     }
 
     /**
@@ -57,6 +74,13 @@ class CountryController extends Controller
     public function edit($id)
     {
         //
+        $person = Person::where('id', $id)->firstOrFail();
+        $countries = Country::all();
+
+        return view('person_edit', [
+            'person' => $person,
+            'countries' => $countries,
+        ]);
     }
 
     /**
@@ -69,6 +93,15 @@ class CountryController extends Controller
     public function update(Request $request, $id)
     {
         //
+        Person::where('id', $id)->update([
+            'name' => $request->name,
+            'country_id' => $request->country_id,
+        ]);
+
+        return [
+            'result' => true,
+            'message' => 'Success'
+        ];
     }
 
     /**
@@ -80,5 +113,11 @@ class CountryController extends Controller
     public function destroy($id)
     {
         //
+        Person::where("id", $id)->delete();
+
+        return [
+            'result' => true,
+            'message' => 'Success'
+        ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CountryController;
+use App\Http\Controllers\PersonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout');
 });
+
+Route::resource('person', PersonController::class);
